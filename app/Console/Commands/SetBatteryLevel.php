@@ -15,7 +15,7 @@ class SetBatteryLevel extends Command
      *
      * @var string
      */
-    protected $signature = 'set:battery-level';
+    protected $signature = 'calc:battery-level';
 
     /**
      * The console command description.

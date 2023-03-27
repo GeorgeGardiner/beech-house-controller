@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tado_zone_reading', function (Blueprint $table) {
+        Schema::create('tado_zone_state', function (Blueprint $table) {
             $table->id();
             $table->dateTime('reading_at');
             $table->integer('zone_id');
             $table->double('temperature', 5, 2)->nullable();
             $table->integer('humidity')->nullable();
-            $table->integer('target_temperature', 5, 2)->nullable();
-            $table->boolean('is_heating')->nullable();
-            $table->integer('heating_power_pct')->nullable();
+            $table->double('target_temperature', 5, 2)->nullable();
+            $table->integer('heating_power')->nullable();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('tado_zone_reading');
+        Schema::drop('tado_zone_state');
     }
 };

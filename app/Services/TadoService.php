@@ -6,8 +6,15 @@ use Illuminate\Support\Facades\Http;
 
 class TadoService
 {
+    private $bearerToken = null;
+    private $bearerTokenExpiresAt = null;
+
     public function getBearerToken()
     {
+        if($this->bearerToken !== null && $this->bearerTokenExpiresAt !== null && $this->bearerTokenExpiresAt->isFuture()) {
+            return $this->bearerToken;
+        }
+
         $authorizationResponse = Http::asForm()
             ->acceptJson()
             ->post(config('services.tado.oauth_api'), [
@@ -25,10 +32,14 @@ class TadoService
         if($authorizationResponse->json('access_token') === null) {
             return null;
         }
-        return $authorizationResponse->json('access_token');
+
+        $this->bearerToken = $authorizationResponse->json('access_token');
+        $this->bearerTokenExpiresAt = now()->addSeconds($authorizationResponse->json('expires_in'))->subSeconds(10);
+
+        return $this->bearerToken;
     }
 
-    public function getBeechHouseZones() {
+    public function getZoneStates() {
         $bearerToken = $this->getBearerToken();
         if($bearerToken === null) {
             return null;
@@ -38,8 +49,13 @@ class TadoService
             ->acceptJson()
             ->get('https://my.tado.com/api/v2/homes/'.config('services.tado.home_id').'/zoneStates?ngsw-bypass=true');
 
-
-
+        if($zonesResponse->failed()) {
+            return null;
+        }
+        if($zonesResponse->json('zoneStates') === null) {
+            return null;
+        }
+        return $zonesResponse->json('zoneStates');
     }
 
 

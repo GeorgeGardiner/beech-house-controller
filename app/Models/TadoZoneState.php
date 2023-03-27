@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TadoZoneReading extends Model
+class TadoZoneState extends Model
 {
-    protected $table = 'tado_zone_reading';
+    protected $table = 'tado_zone_state';
 
     public $timestamps = false;
 
@@ -16,7 +16,7 @@ class TadoZoneReading extends Model
         'temperature' => 'double',
         'humidity' => 'integer',
         'target_temperature' => 'double',
-        'is_heating' => 'boolean',
-        'heating_power_pct' => 'integer'
+        'call_for_heat' => 'boolean',
+        'heating_power' => 'integer'
     ];
 }

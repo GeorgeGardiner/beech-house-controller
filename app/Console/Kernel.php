@@ -13,6 +13,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('monitor:solax')->everyTenMinutes();
+        $schedule->command('monitor:forecast-solar')->everyFourHours();
+        $schedule->command('calc:battery-level')->dailyAt('23:15');
+        $schedule->command('monitor:tado')->everyFifteenMinutes();
     }
 
     /**
